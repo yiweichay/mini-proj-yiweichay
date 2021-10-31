@@ -1,7 +1,7 @@
 Version 4.0 HI-TECH Software Intermediate Code
 [p mainexit ]
-"8 ./led.h
-[; ;./led.h: 8: void led_init(void);
+"11 ./led.h
+[; ;./led.h: 11: void led_init(void);
 [v _led_init `(v ~T0 @X0 0 ef ]
 "8 ./ADC.h
 [; ;./ADC.h: 8: void ADC_init(void);
@@ -9,12 +9,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 "9
 [; ;./ADC.h: 9: unsigned int ADC_getval(void);
 [v _ADC_getval `(ui ~T0 @X0 0 ef ]
-"10 ./led.h
-[; ;./led.h: 10: void led_off(void);
-[v _led_off `(v ~T0 @X0 0 ef ]
-"9
-[; ;./led.h: 9: void led_on(void);
-[v _led_on `(v ~T0 @X0 0 ef ]
+"12 ./led.h
+[; ;./led.h: 12: void set_led(unsigned int value);
+[v _set_led `(v ~T0 @X0 0 ef1`ui ]
 "8 main.c
 [p x FEXTOSC  =  HS      ]
 "9
@@ -1996,59 +1993,38 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;C:/Program Files/Microchip/MPLABX/v5.50/packs/Microchip/PIC18F-K_DFP/1.4.87/xc8\pic\include\proc\pic18f67k40.h: 40981: __asm("TOSU equ 0FFFh");
 [; <" TOSU equ 0FFFh ;# ">
 [v $root$_main `(v ~T0 @X0 0 e ]
-"27 main.c
-[; ;main.c: 27: void main(void) {
+"24 main.c
+[; ;main.c: 24: void main(void) {
 [v _main `(v ~T0 @X0 1 ef ]
 {
 [e :U _main ]
 [f ]
-"29
-[; ;main.c: 29:     led_init();
+"26
+[; ;main.c: 26:     led_init();
 [e ( _led_init ..  ]
-"30
-[; ;main.c: 30:     ADC_init();
+"27
+[; ;main.c: 27:     ADC_init();
 [e ( _ADC_init ..  ]
-"31
-[; ;main.c: 31:     unsigned int LDRoutput;
+"28
+[; ;main.c: 28:     unsigned int LDRoutput;
 [v _LDRoutput `ui ~T0 @X0 1 a ]
-"33
-[; ;main.c: 33:     while (1){
+"30
+[; ;main.c: 30:     while (1){
 [e :U 2021 ]
 {
-"34
-[; ;main.c: 34:         LDRoutput = ADC_getval();
+"31
+[; ;main.c: 31:         LDRoutput = ADC_getval();
 [e = _LDRoutput ( _ADC_getval ..  ]
-"35
-[; ;main.c: 35:         if(LDRoutput >= 0b1111){
-[e $ ! >= _LDRoutput -> -> 15 `i `ui 2023  ]
-{
-"36
-[; ;main.c: 36:             led_off();
-[e ( _led_off ..  ]
-"37
-[; ;main.c: 37:         }
-}
-[e $U 2024  ]
-"38
-[; ;main.c: 38:         else if(LDRoutput <= 0b1100){
-[e :U 2023 ]
-[e $ ! <= _LDRoutput -> -> 12 `i `ui 2025  ]
-{
-"39
-[; ;main.c: 39:             led_on();
-[e ( _led_on ..  ]
-"40
-[; ;main.c: 40:         }
-}
-[e :U 2025 ]
-[e :U 2024 ]
-"42
-[; ;main.c: 42:     }
+"32
+[; ;main.c: 32:         set_led(LDRoutput);
+[e ( _set_led (1 _LDRoutput ]
+"33
+[; ;main.c: 33:     }
 }
 [e :U 2020 ]
 [e $U 2021  ]
 [e :U 2022 ]
-"43
-[; ;main.c: 43: }
+"34
+[; ;main.c: 34: }
 [e :UE 2019 ]
 }

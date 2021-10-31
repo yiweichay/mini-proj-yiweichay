@@ -24186,16 +24186,9 @@ extern __attribute__((nonreentrant)) void _delay3(unsigned char);
 # 9 "led.c" 2
 
 # 1 "./led.h" 1
-
-
-
-
-
-
-
+# 11 "./led.h"
 void led_init(void);
-void led_on(void);
-void led_off(void);
+void set_led(unsigned int value);
 # 10 "led.c" 2
 
 
@@ -24205,12 +24198,11 @@ void led_init(void)
     TRISHbits.TRISH3 = 0;
 }
 
-void led_on(void)
-{
-    LATHbits.LATH3 = 1;
-}
-
-void led_off(void)
-{
-    LATHbits.LATH3 = 0;
+void set_led(unsigned int value){
+    if(value >= 0b1111){
+        LATHbits.LATH3 = 0;
+    }
+    else if(value <= 0b1100){
+        LATHbits.LATH3 = 1;
+    }
 }

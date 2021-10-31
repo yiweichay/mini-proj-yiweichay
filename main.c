@@ -20,9 +20,6 @@
 #include "ADC.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
-#define dayLightPresent 0b1111
-#define dayLightAbsent 0b1100
-
 
 void main(void) {
     //call initialisation functions
@@ -32,12 +29,6 @@ void main(void) {
 
     while (1){
         LDRoutput = ADC_getval();
-        if(LDRoutput >= dayLightPresent){
-            led_off();
-        }
-        else if(LDRoutput <= dayLightAbsent){
-            led_on();
-        }
-         
+        set_led(LDRoutput);
     }
 }

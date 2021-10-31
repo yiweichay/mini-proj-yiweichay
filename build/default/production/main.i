@@ -24209,16 +24209,9 @@ void LEDarray_disp_PPM(unsigned int number, unsigned int max);
 # 16 "main.c" 2
 
 # 1 "./led.h" 1
-
-
-
-
-
-
-
+# 11 "./led.h"
 void led_init(void);
-void led_on(void);
-void led_off(void);
+void set_led(unsigned int value);
 # 17 "main.c" 2
 
 # 1 "./interrupts.h" 1
@@ -24260,9 +24253,6 @@ unsigned int ADC_getval(void);
 
 
 
-
-
-
 void main(void) {
 
     led_init();
@@ -24271,12 +24261,6 @@ void main(void) {
 
     while (1){
         LDRoutput = ADC_getval();
-        if(LDRoutput >= 0b1111){
-            led_off();
-        }
-        else if(LDRoutput <= 0b1100){
-            led_on();
-        }
-
+        set_led(LDRoutput);
     }
 }

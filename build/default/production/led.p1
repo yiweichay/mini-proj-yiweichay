@@ -2034,32 +2034,37 @@ Version 4.0 HI-TECH Software Intermediate Code
 [e :UE 2019 ]
 }
 "18
-[; ;led.c: 18: void led_on(void)
-[v _led_on `(v ~T0 @X0 1 ef ]
+[; ;led.c: 18: void set_led(unsigned int value){
+[v _set_led `(v ~T0 @X0 1 ef1`ui ]
+{
+[e :U _set_led ]
+[v _value `ui ~T0 @X0 1 r1 ]
+[f ]
 "19
-[; ;led.c: 19: {
+[; ;led.c: 19:     if(value >= 0b1111){
+[e $ ! >= _value -> -> 15 `i `ui 2021  ]
 {
-[e :U _led_on ]
-[f ]
 "20
-[; ;led.c: 20:     LATHbits.LATH3 = 1;
-[e = . . _LATHbits 0 3 -> -> 1 `i `uc ]
-"21
-[; ;led.c: 21: }
-[e :UE 2020 ]
-}
-"23
-[; ;led.c: 23: void led_off(void)
-[v _led_off `(v ~T0 @X0 1 ef ]
-"24
-[; ;led.c: 24: {
-{
-[e :U _led_off ]
-[f ]
-"25
-[; ;led.c: 25:     LATHbits.LATH3 = 0;
+[; ;led.c: 20:         LATHbits.LATH3 = 0;
 [e = . . _LATHbits 0 3 -> -> 0 `i `uc ]
-"26
-[; ;led.c: 26: }
-[e :UE 2021 ]
+"21
+[; ;led.c: 21:     }
+}
+[e $U 2022  ]
+"22
+[; ;led.c: 22:     else if(value <= 0b1100){
+[e :U 2021 ]
+[e $ ! <= _value -> -> 12 `i `ui 2023  ]
+{
+"23
+[; ;led.c: 23:         LATHbits.LATH3 = 1;
+[e = . . _LATHbits 0 3 -> -> 1 `i `uc ]
+"24
+[; ;led.c: 24:     }
+}
+[e :U 2023 ]
+[e :U 2022 ]
+"25
+[; ;led.c: 25: }
+[e :UE 2020 ]
 }

@@ -15,12 +15,11 @@ void led_init(void)
     TRISHbits.TRISH3 = 0; //set TRIS value for pin (output)
 }
 
-void led_on(void)
-{
-    LATHbits.LATH3 = 1; //LED RH3 turns on
-}
-
-void led_off(void)
-{
-    LATHbits.LATH3 = 0; //LED RH3 turns off
+void set_led(unsigned int value){
+    if(value >= dayLightPresent){
+        LATHbits.LATH3 = 0;
+    }
+    else if(value <= dayLightAbsent){
+        LATHbits.LATH3 = 1;
+    }
 }
