@@ -24199,10 +24199,10 @@ void led_init(void)
 }
 
 void set_led(unsigned int value){
-    if(value >= 0b1111){
+    if(value >= 0b11110){
         LATHbits.LATH3 = 0;
     }
-    else if(value <= 0b1100){
+    else if(value <= 0b1111){
         LATHbits.LATH3 = 1;
     }
 }

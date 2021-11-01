@@ -6,12 +6,18 @@ Version 4.0 HI-TECH Software Intermediate Code
 "8 ./ADC.h
 [; ;./ADC.h: 8: void ADC_init(void);
 [v _ADC_init `(v ~T0 @X0 0 ef ]
-"9
+"9 ./LEDarray.h
+[; ;./LEDarray.h: 9: void LEDarray_init(void);
+[v _LEDarray_init `(v ~T0 @X0 0 ef ]
+"9 ./ADC.h
 [; ;./ADC.h: 9: unsigned int ADC_getval(void);
 [v _ADC_getval `(ui ~T0 @X0 0 ef ]
 "12 ./led.h
 [; ;./led.h: 12: void set_led(unsigned int value);
 [v _set_led `(v ~T0 @X0 0 ef1`ui ]
+"10 ./LEDarray.h
+[; ;./LEDarray.h: 10: void LEDarray_disp_bin(unsigned int number);
+[v _LEDarray_disp_bin `(v ~T0 @X0 0 ef1`ui ]
 "8 main.c
 [p x FEXTOSC  =  HS      ]
 "9
@@ -2006,25 +2012,35 @@ Version 4.0 HI-TECH Software Intermediate Code
 [; ;main.c: 27:     ADC_init();
 [e ( _ADC_init ..  ]
 "28
-[; ;main.c: 28:     unsigned int LDRoutput;
-[v _LDRoutput `ui ~T0 @X0 1 a ]
+[; ;main.c: 28:     LEDarray_init();
+[e ( _LEDarray_init ..  ]
+"29
+[; ;main.c: 29:     unsigned int hour = 9;
+[v _hour `ui ~T0 @X0 1 a ]
+[e = _hour -> -> 9 `i `ui ]
 "30
-[; ;main.c: 30:     while (1){
+[; ;main.c: 30:     unsigned int LDRoutput;
+[v _LDRoutput `ui ~T0 @X0 1 a ]
+"32
+[; ;main.c: 32:     while (1){
 [e :U 2021 ]
 {
-"31
-[; ;main.c: 31:         LDRoutput = ADC_getval();
-[e = _LDRoutput ( _ADC_getval ..  ]
-"32
-[; ;main.c: 32:         set_led(LDRoutput);
-[e ( _set_led (1 _LDRoutput ]
 "33
-[; ;main.c: 33:     }
+[; ;main.c: 33:         LDRoutput = ADC_getval();
+[e = _LDRoutput ( _ADC_getval ..  ]
+"34
+[; ;main.c: 34:         set_led(LDRoutput);
+[e ( _set_led (1 _LDRoutput ]
+"35
+[; ;main.c: 35:         LEDarray_disp_bin(hour);
+[e ( _LEDarray_disp_bin (1 _hour ]
+"36
+[; ;main.c: 36:     }
 }
 [e :U 2020 ]
 [e $U 2021  ]
 [e :U 2022 ]
-"34
-[; ;main.c: 34: }
+"37
+[; ;main.c: 37: }
 [e :UE 2019 ]
 }

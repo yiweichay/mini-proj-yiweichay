@@ -2041,8 +2041,8 @@ Version 4.0 HI-TECH Software Intermediate Code
 [v _value `ui ~T0 @X0 1 r1 ]
 [f ]
 "19
-[; ;led.c: 19:     if(value >= 0b1111){
-[e $ ! >= _value -> -> 15 `i `ui 2021  ]
+[; ;led.c: 19:     if(value >= 0b11110){
+[e $ ! >= _value -> -> 30 `i `ui 2021  ]
 {
 "20
 [; ;led.c: 20:         LATHbits.LATH3 = 0;
@@ -2052,9 +2052,9 @@ Version 4.0 HI-TECH Software Intermediate Code
 }
 [e $U 2022  ]
 "22
-[; ;led.c: 22:     else if(value <= 0b1100){
+[; ;led.c: 22:     else if(value <= 0b1111){
 [e :U 2021 ]
-[e $ ! <= _value -> -> 12 `i `ui 2023  ]
+[e $ ! <= _value -> -> 15 `i `ui 2023  ]
 {
 "23
 [; ;led.c: 23:         LATHbits.LATH3 = 1;

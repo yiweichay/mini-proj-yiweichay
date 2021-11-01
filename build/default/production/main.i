@@ -24257,10 +24257,13 @@ void main(void) {
 
     led_init();
     ADC_init();
+    LEDarray_init();
+    unsigned int hour = 9;
     unsigned int LDRoutput;
 
     while (1){
         LDRoutput = ADC_getval();
         set_led(LDRoutput);
+        LEDarray_disp_bin(hour);
     }
 }
