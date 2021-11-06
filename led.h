@@ -5,8 +5,8 @@
 
 #define _XTAL_FREQ 64000000
 
-#define dayLightPresent 0b11110
-#define dayLightAbsent 0b1111
+#define dayLightPresent 60
+#define dayLightAbsent 45
 
 void led_init(void);
 void set_led(unsigned int value);

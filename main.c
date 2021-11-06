@@ -18,20 +18,49 @@
 #include "interrupts.h"
 #include "comparator.h"
 #include "ADC.h"
+#include "timers.h"
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
+
+//volatile unsigned int hour = 9;
+void button_init(void){
+    //setup pin for input
+    TRISFbits.TRISF2 = 1;
+    ANSELFbits.ANSELF2 = 0;
+    TRISFbits.TRISF3 = 1;
+    ANSELFbits.ANSELF3 = 0;
+}
 
 void main(void) {
     //call initialisation functions
     led_init();
     ADC_init();
     LEDarray_init();
-    unsigned int hour = 9;
+    Timer0_init();
+    Interrupts_init();
+    button_init();
+    
     unsigned int LDRoutput;
-
+    unsigned int count=0;
+    while(PORTFbits.RF3){
+        if (!PORTFbits.RF2){
+            count++;
+            if (count>24) {count=0;} //reset a when it gets too big
+            LEDarray_disp_bin(count); //output a on the LED array in binary
+            __delay_ms(500);
+        }
+    }
+    for(int i=0; i<3; i++){
+        LEDarray_disp_bin(count); //output a on the LED array in binary
+        __delay_ms(500);
+        LEDarray_disp_bin(0); //output a on the LED array in binary
+        __delay_ms(500);
+    }
+    LEDarray_disp_bin(count);
     while (1){
         LDRoutput = ADC_getval();
         set_led(LDRoutput);
-        LEDarray_disp_bin(hour);
+        //LEDarray_disp_bin(hour);
     }
+        
 }
