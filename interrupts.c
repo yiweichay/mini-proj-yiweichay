@@ -13,23 +13,21 @@ void Interrupts_init(void)
     PIE0bits.TMR0IE = 1; //make use of timer interrupt 
     INTCONbits.GIEL = 1; //turn on global peripheral interrupts
     INTCONbits.GIE = 1; //turn on interrupts globally (when this is off, all interrupts are deactivated))
-    
-    TRISGbits.TRISG6 = 0;
-    LATGbits.LATG6 = 0;
 }
 
 /************************************
  * High priority interrupt service routine
  * Make sure all enabled interrupts are checked and flags cleared
 ************************************/
-void __interrupt(high_priority) HighISR()
-{
-	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...
-    if(PIR0bits.TMR0IF){
-        //hour = 1; //change the state of the LED 
-        TMR0H = 0b1011; //11
-        TMR0L = 0b11011011;//219
-        PIR0bits.TMR0IF = 0; // clearing the flag
-    }
-}
+//void __interrupt(high_priority) HighISR()
+//{
+//	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...
+//    if(PIR0bits.TMR0IF){
+//        count++;
+//        //hour = 1; //change the state of the LED 
+//        TMR0H = 0b1011; //11
+//        TMR0L = 0b11011011;//219
+//        PIR0bits.TMR0IF = 0; // clearing the flag
+//    }
+//}
 

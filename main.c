@@ -22,7 +22,28 @@
 
 #define _XTAL_FREQ 64000000 //note intrinsic _delay function is 62.5ns at 64,000,000Hz  
 
-//volatile unsigned int hour = 9;
+static volatile unsigned int count = 0;
+static volatile unsigned int offled = 0;
+
+void __interrupt(high_priority) HighISR()
+{
+	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...
+    if(PIR0bits.TMR0IF){
+        count++;
+        if (count>24) {count=0;} //reset a when it gets too big
+        
+        if (count == 1){ //turn off led between 1am and 5am
+            offled = 1;
+            LATHbits.LATH3 = 0;
+        }
+        else if(count == 5){offled = 0;}
+
+        LEDarray_disp_bin(count);
+        TMR0H = 0b1011; //11
+        TMR0L = 0b11011011;//219
+        PIR0bits.TMR0IF = 0; // clearing the flag
+    }
+}
 void button_init(void){
     //setup pin for input
     TRISFbits.TRISF2 = 1;
@@ -37,17 +58,24 @@ void main(void) {
     ADC_init();
     LEDarray_init();
     Timer0_init();
-    Interrupts_init();
     button_init();
     
     unsigned int LDRoutput;
-    unsigned int count=0;
+    //unsigned int count=0;
     while(PORTFbits.RF3){
         if (!PORTFbits.RF2){
             count++;
             if (count>24) {count=0;} //reset a when it gets too big
+            
+            if (count>=1 && count<5){ //turn off led between 1am and 5am
+                offled = 1;
+                LATHbits.LATH3 = 0;
+            }
+            else{offled = 0;}
+            
             LEDarray_disp_bin(count); //output a on the LED array in binary
             __delay_ms(500);
+            
         }
     }
     for(int i=0; i<3; i++){
@@ -57,10 +85,12 @@ void main(void) {
         __delay_ms(500);
     }
     LEDarray_disp_bin(count);
+    Interrupts_init();
     while (1){
-        LDRoutput = ADC_getval();
-        set_led(LDRoutput);
-        //LEDarray_disp_bin(hour);
+        if (!offled){
+            LDRoutput = ADC_getval();
+            set_led(LDRoutput);
+            //LEDarray_disp_bin(hour);
+        }    
     }
-        
 }
