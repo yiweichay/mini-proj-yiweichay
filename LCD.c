@@ -162,10 +162,10 @@ void LCD_scroll(void)
  * the result is stored in buf as ascii text ready for display on LCD
  * Note result is stored in a buffer using pointers, it is not sent to the LCD
 ************************************/
-void DATE2String(char *buf, unsigned int day, unsigned int month, unsigned int year){
+void DATE2String(char *buf, unsigned int daylightday, unsigned int date, unsigned int month, unsigned int year){
 	//code to calculate the inegeter and fractions part of a ADC value
 	// and format as a string using sprintf (see GitHub readme)
-    sprintf(buf,"%d/ %d/ %d",day, month, year);
+    sprintf(buf,"%d, %d/ %d/ %d",daylightday, date, month, year);
     LCD_sendstring(buf);
     __delay_ms(250);
     LCD_sendbyte(0b00000001, 0);

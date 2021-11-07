@@ -8,9 +8,13 @@
 
 void nextday(void);
 int leap(int y);
-void set_date(int d, int m, int y);
-unsigned int getDay();
+void set_date(int day_week, int d, int m, int y);
+unsigned int getDate();
 unsigned int getMonth();
 unsigned int getYear();
+unsigned int getDayofWeek();
+
+int dateOfLastSunday(int monthTarget, int numberOfDays);
+int calculateDaysToTarget(int monthTarget);
 
 #endif

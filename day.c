@@ -10,42 +10,93 @@
 #include "day.h"
 
 static int days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-int day, month, year;
+int day, date, month, year;
 
+//code to calculate the leap year
 int leap(int y){
     return ((y % 4 == 0 && y%  100 != 0) || y % 400 == 0);
 }
 
+//code for day increments
 void nextday(void) 
 {
     day += 1;
-    if (day > days_in_month[month]){
-        day = 1;
+    if(day > 7){day -= 7;}
+    date += 1;
+    if (date > days_in_month[month]){ 
+        date = 1;
         month += 1;
-        year += 1;
-        if (leap(year)){
-            days_in_month[2] = 29;
-        }
-        else {
-            days_in_month[2] = 28;
+        if (month>12){
+            month = 1;
+            year += 1;
+            if (leap(year)){
+                days_in_month[2] = 29;
+            }
+            else {
+                days_in_month[2] = 28;
+            }
         }
     }
 }
 
-void set_date(int d, int m, int y){
+//code to set the day,month,year
+void set_date(int day_week, int d, int m, int y){
     if (m > 12){m = 1;}
     if (d > days_in_month[m]){d = days_in_month[m+1];}
+    if (day_week > 7){day_week =1;}
     
     if (leap(y)){days_in_month[2] = 29;}
     else {days_in_month[2] = 28;}
     
-    day = d;
+    day = day_week;
+    date = d;
     month = m;
     year = y;
 }
-    
-unsigned int getDay(){
-    return day;
+
+//calculate the number of days until the last sunday of march/oct
+int calculateDaysToTarget(int monthTarget){
+    int numberOfDays = days_in_month[month] - date;
+    if(month >= monthTarget){
+        for(int i=month+1; i<13; i++){ //this is until december
+            numberOfDays += days_in_month[i];
+        }
+        for(int i=1; i<monthTarget; i++){ //from jan to march
+            numberOfDays += days_in_month[i];
+        }
+        if(leap(year+1) && monthTarget > 2){
+            numberOfDays++;
+        }
+        else if(leap(year)){
+            numberOfDays--;
+        }
+    }
+    else{
+        for(int i=month+1; i<monthTarget; i++){
+            numberOfDays += days_in_month[i];
+        }
+    }
+    return numberOfDays+1;
+}
+
+//determine which day of the week is 1st of march/oct
+int dateOfLastSunday(int monthTarget, int numberOfDays){
+    //firstDay is first day of monthTarget
+    int firstDay = numberOfDays % 7; //this is to find out which day 1st of march falls on 
+    firstDay += day;
+    if(firstDay > 7){
+        firstDay -= 7; //gives the day of the week for 1st march
+    }
+    int dateTarget = 1+(7-firstDay); //gives date of first Sunday of march
+    while(dateTarget <= days_in_month[monthTarget]){
+        dateTarget += 7;
+    }
+    dateTarget -= 7;
+    return dateTarget;
+}
+
+unsigned int getDate(){
+    return date;
 }
 
 unsigned int getMonth(){
@@ -54,4 +105,8 @@ unsigned int getMonth(){
 
 unsigned int getYear(){
     return year;
+}
+
+unsigned int getDayofWeek(){
+    return day;
 }

@@ -28,6 +28,8 @@ static volatile unsigned int count = 0;
 static volatile unsigned int offled = 0;
 char *buf;
 char num;
+int date_daylightOn;
+int date_daylightOff;
 
 void __interrupt(high_priority) HighISR()
 {
@@ -35,12 +37,11 @@ void __interrupt(high_priority) HighISR()
     if(PIR0bits.TMR0IF){
         count++;
         if (count==24){
-            count=0;
+            count=0; //reset a when it gets too big
             nextday();
-            buf = &num;
-            DATE2String(buf, getDay(), getMonth(), getYear());
-            
-        } //reset a when it gets too big
+//            buf = &num;
+//            DATE2String(buf, getDay(), getMonth(), getYear());
+        } 
         
         if (count == 1){ //turn off led between 1am and 5am
             offled = 1;
@@ -71,7 +72,10 @@ void main(void) {
     button_init();
     LCD_init();
     
-    set_date(7,11,2021);
+    set_date(7,30,10,2022);
+    int numberOfDays = calculateDaysToTarget(10);
+    date_daylightOn = dateOfLastSunday(10, numberOfDays);
+    
     unsigned int LDRoutput;
     //unsigned int count=0;
     while(PORTFbits.RF3){
@@ -104,7 +108,7 @@ void main(void) {
     Interrupts_init();
     while (1){
         buf = &num;
-        DATE2String(buf, getDay(), getMonth(), getYear());
+        DATE2String(buf, date_daylightOn, getDate(), getMonth(), getYear());
         if (!offled){
             LDRoutput = ADC_getval();
             set_led(LDRoutput);
