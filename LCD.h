@@ -22,6 +22,6 @@ void LCD_setline (char line);
 void LCD_sendstring(char *string);
 void LCD_scroll(void);
 void LCD_clear(void);
-void DATE2String(char *buf, unsigned int daylightday, unsigned int date, unsigned int month, unsigned int year);
+void DATE2String(char *buf, unsigned int daylightday, unsigned int date, unsigned int month, unsigned int year, unsigned int sec, unsigned int min, unsigned int hour);
 
 #endif

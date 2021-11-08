@@ -32,10 +32,10 @@ char *buf;
 char num;
 static volatile int date_daylightOn;
 static volatile int date_daylightOff;
-int dusk[2];
-int dawn[2];
-int midday[2];
-int solarnoon[] = {0, 12};
+static volatile int dusk[2];
+static volatile int dawn[2];
+static volatile int midday[2] = {61, 25};
+static volatile int solarnoon[] = {0, 12};
 
 unsigned int LDRoutput;
 static volatile int dawnOver = 1;
@@ -46,10 +46,10 @@ void __interrupt(high_priority) HighISR()
 	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...
     if(PIR0bits.TMR0IF){
         sec++;
-        if (sec > 60);{
+        if (sec > 60){
             sec = 0;
             min += 1;
-            if (min > 60);{
+            if (min > 60){
                 min = 0;
                 hour += 1;
                 if (hour==24){
@@ -83,8 +83,8 @@ void __interrupt(high_priority) HighISR()
             ///   at midday time calculated, reset clock to be 12pm(example))
             if(min == midday[0] && hour == midday[1]){
                 if (midday[0] != solarnoon[0] || midday[1] != solarnoon[1]){
-                    //min = solarnoon[0];
-                    //hour = solarnoon[1];
+                    min = solarnoon[0];
+                    hour = solarnoon[1];
                     LEDarray_disp_bin(hour);
                 }
             }
@@ -148,7 +148,7 @@ void main(void) {
     Interrupts_init();
     while (1){
         buf = &num;
-        DATE2String(buf, date_daylightOn, getDate(), getMonth(), getYear());
+        DATE2String(buf, date_daylightOn, getDate(), getMonth(), getYear(), sec, min, hour);
         LDRoutput = ADC_getval();
         if (LDRoutput >= dayLightPresent && dawnOver == 0){
             //dawn = [min, hour];
@@ -164,8 +164,12 @@ void main(void) {
                 dusk[1] -= 1;
                 dusk[0] += 60;
             }
+            
             midday[0] = (dusk[0]-dawn[0])/2 + dawn[0];
             midday[1] = (dusk[1]-dawn[1])/2 + dawn[1];
+            if ((dusk[1]-dawn[1])%2 != 0){
+                midday[0] += 30;
+            }
             duskOver = 1;
         }
         

@@ -58,8 +58,8 @@ void set_date(int day_week, int d, int m, int y){
 //calculate the number of days until the last sunday of march/oct
 int calculateDaysToTarget(int monthTarget, int recalculate){ // month target is either march(3) or oct(10)
     int numberOfDays = 0; //define the current number of days to 1st of march/oct
-    if(month != monthTarget || (month == monthTarget && (date + 7-day) > days_in_month[month]) || recalculate == 1){ //nearest sunday is not in the same month
-        numberOfDays = days_in_month[month] - date; 
+    if(month != monthTarget || (month == monthTarget && (date + 7-day) > days_in_month[month]) || recalculate == 1){ //nearest sunday is not in the same month/ same month and date >= daylight saving date
+        numberOfDays = days_in_month[month] - date; // get remaining number of days in the current month
         if(month < monthTarget){
             for(int i=month+1; i<monthTarget; i++){
                 numberOfDays += days_in_month[i];
@@ -97,18 +97,19 @@ int dateOfLastSunday(int monthTarget, int numberOfDays){
         dateTarget = 1+(7-firstDay); //gives date of first Sunday of march
     }
     else{
-        dateTarget = date + (7-day);
+        dateTarget = date + (7-day); // this is if month = month target and date < daylight saving date
         if(dateTarget > days_in_month[monthTarget]){
             dateTarget -= 7;
         }
     }
-    while(dateTarget <= days_in_month[monthTarget]){
+    while(dateTarget <= days_in_month[monthTarget]){ //to find the last sunday of the month
         dateTarget += 7;
     }
     dateTarget -= 7;
     return dateTarget;
 }
 
+//return to get the current day, date, month and year
 unsigned int getDate(){
     return date;
 }
