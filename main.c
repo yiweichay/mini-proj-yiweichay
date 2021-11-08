@@ -30,8 +30,8 @@ static volatile unsigned int hour = 0;
 static volatile unsigned int offled = 0;
 char *buf;
 char num;
-int date_daylightOn;
-int date_daylightOff;
+static volatile int date_daylightOn;
+static volatile int date_daylightOff;
 int dusk[2];
 int dawn[2];
 int midday[2];
@@ -46,10 +46,10 @@ void __interrupt(high_priority) HighISR()
 	//add your ISR code here i.e. check the flag, do something (i.e. toggle an LED), clear the flag...
     if(PIR0bits.TMR0IF){
         sec++;
-        if (sec > 60){
+        if (sec > 60);{
             sec = 0;
             min += 1;
-            if (min > 60){
+            if (min > 60);{
                 min = 0;
                 hour += 1;
                 if (hour==24){
@@ -57,8 +57,6 @@ void __interrupt(high_priority) HighISR()
                     nextday();
                     dawnOver = 0;
                     duskOver = 0;
-//                  buf = &num;
-//                  DATE2String(buf, getDay(), getMonth(), getYear());
                 } 
         
                 if (hour == 1){ //turn off led between 1am and 5am
@@ -69,10 +67,14 @@ void __interrupt(high_priority) HighISR()
         
                 if (getMonth()==3 && getDate()== date_daylightOn && hour==1){
                     hour += 1;
+                    int numberOfDays = calculateDaysToTarget(3, 1);
+                    date_daylightOn = dateOfLastSunday(3, numberOfDays);
                 }
         
                 if (getMonth()==10 && getDate() == date_daylightOff && hour==2){
                     hour -=1;
+                    int numberOfDays = calculateDaysToTarget(10, 1);
+                    date_daylightOff = dateOfLastSunday(10, numberOfDays);
                 }
 
                 LEDarray_disp_bin(hour);
@@ -81,8 +83,8 @@ void __interrupt(high_priority) HighISR()
             ///   at midday time calculated, reset clock to be 12pm(example))
             if(min == midday[0] && hour == midday[1]){
                 if (midday[0] != solarnoon[0] || midday[1] != solarnoon[1]){
-                    min = solarnoon[0];
-                    hour = solarnoon[1];
+                    //min = solarnoon[0];
+                    //hour = solarnoon[1];
                     LEDarray_disp_bin(hour);
                 }
             }
@@ -109,11 +111,11 @@ void main(void) {
     button_init();
     LCD_init();
     
-    set_date(7,31,10,2021);
-    int numberOfDays = calculateDaysToTarget(3);
+    set_date(3,30,3,2022);
+    int numberOfDays = calculateDaysToTarget(3,0);
     date_daylightOn = dateOfLastSunday(3, numberOfDays);
     
-    numberOfDays = calculateDaysToTarget(10);
+    numberOfDays = calculateDaysToTarget(10,0);
     date_daylightOff = dateOfLastSunday(10, numberOfDays);
     
     //unsigned int count=0;

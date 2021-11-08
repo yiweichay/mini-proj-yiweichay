@@ -9,8 +9,8 @@
 #include <xc.h>
 #include "day.h"
 
-int days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
-int day, date, month, year;
+static int days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31}; //number of days in each month
+int day, date, month, year; //day = mon, tue etc, 
 
 //code to calculate the leap year
 int leap(int y){
@@ -21,7 +21,7 @@ int leap(int y){
 void nextday(void) 
 {
     day += 1;
-    if(day > 7){day = 1;}
+    if(day > 7){day = 1;} //if day count increases more than 7 (sunday), day = mon
     date += 1;
     if (date > days_in_month[month]){ 
         date = 1;
@@ -45,9 +45,10 @@ void set_date(int day_week, int d, int m, int y){
     if (d > days_in_month[m]){d = days_in_month[m+1];}
     if (day_week > 7){day_week =1;}
     
-    if (leap(y)){days_in_month[2] = 29;}
-    else {days_in_month[2] = 28;}
+    if (leap(y)){days_in_month[2] = 29;} //if leap year, then febuary has 29 days
+    else {days_in_month[2] = 28;} //if not leap year, feb has 28 days
     
+    //define the variables
     day = day_week;
     date = d;
     month = m;
@@ -55,11 +56,16 @@ void set_date(int day_week, int d, int m, int y){
 }
 
 //calculate the number of days until the last sunday of march/oct
-int calculateDaysToTarget(int monthTarget){
-    int numberOfDays = 0;
-    if(month != monthTarget){
-        numberOfDays = days_in_month[month] - date;
-        if(month > monthTarget){
+int calculateDaysToTarget(int monthTarget, int recalculate){ // month target is either march(3) or oct(10)
+    int numberOfDays = 0; //define the current number of days to 1st of march/oct
+    if(month != monthTarget || (month == monthTarget && (date + 7-day) > days_in_month[month]) || recalculate == 1){ //nearest sunday is not in the same month
+        numberOfDays = days_in_month[month] - date; 
+        if(month < monthTarget){
+            for(int i=month+1; i<monthTarget; i++){
+                numberOfDays += days_in_month[i];
+            }
+        }
+        else{
             for(int i=month+1; i<13; i++){ //this is until december
                 numberOfDays += days_in_month[i];
             }
@@ -71,11 +77,6 @@ int calculateDaysToTarget(int monthTarget){
             }
             else if(leap(year)){
                 numberOfDays--;
-            }
-        }
-        else{
-            for(int i=month+1; i<monthTarget; i++){
-                numberOfDays += days_in_month[i];
             }
         }
         numberOfDays += 1;

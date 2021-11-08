@@ -15,6 +15,6 @@ unsigned int getYear();
 unsigned int getDayofWeek();
 
 int dateOfLastSunday(int monthTarget, int numberOfDays);
-int calculateDaysToTarget(int monthTarget);
+int calculateDaysToTarget(int monthTarget, int recalculate);
 
 #endif
