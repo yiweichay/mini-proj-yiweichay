@@ -48,6 +48,14 @@ void __interrupt(high_priority) HighISR()
             LATHbits.LATH3 = 0;
         }
         else if(count == 5){offled = 0;}
+        
+        if (getMonth()==3 && getDate()== date_daylightOn && count==1){
+            count += 1;
+        }
+        
+        if (getMonth()==10 && getDate() == date_daylightOff && count==2){
+            count -=1;
+        }
 
         LEDarray_disp_bin(count);
         TMR0H = 0b1011; //11
@@ -72,9 +80,12 @@ void main(void) {
     button_init();
     LCD_init();
     
-    set_date(7,30,10,2022);
-    int numberOfDays = calculateDaysToTarget(10);
-    date_daylightOn = dateOfLastSunday(10, numberOfDays);
+    set_date(6,26,3,2022);
+    int numberOfDays = calculateDaysToTarget(3);
+    date_daylightOn = dateOfLastSunday(3, numberOfDays);
+    
+    numberOfDays = calculateDaysToTarget(10);
+    date_daylightOff = dateOfLastSunday(10, numberOfDays);
     
     unsigned int LDRoutput;
     //unsigned int count=0;
@@ -85,7 +96,6 @@ void main(void) {
                 count=0;
                 nextday();
             } //reset a when it gets too big
-            
             
             if (count>=1 && count<5){ //turn off led between 1am and 5am
                 offled = 1;

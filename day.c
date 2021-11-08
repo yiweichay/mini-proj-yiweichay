@@ -56,38 +56,51 @@ void set_date(int day_week, int d, int m, int y){
 
 //calculate the number of days until the last sunday of march/oct
 int calculateDaysToTarget(int monthTarget){
-    int numberOfDays = days_in_month[month] - date;
-    if(month >= monthTarget){
-        for(int i=month+1; i<13; i++){ //this is until december
-            numberOfDays += days_in_month[i];
+    int numberOfDays = 0;
+    if(month != monthTarget){
+        numberOfDays = days_in_month[month] - date;
+        if(month > monthTarget){
+            for(int i=month+1; i<13; i++){ //this is until december
+                numberOfDays += days_in_month[i];
+            }
+            for(int i=1; i<monthTarget; i++){ //from jan to march
+                numberOfDays += days_in_month[i];
+            }
+            if(leap(year+1) && monthTarget > 2){
+                numberOfDays++;
+            }
+            else if(leap(year)){
+                numberOfDays--;
+            }
         }
-        for(int i=1; i<monthTarget; i++){ //from jan to march
-            numberOfDays += days_in_month[i];
+        else{
+            for(int i=month+1; i<monthTarget; i++){
+                numberOfDays += days_in_month[i];
+            }
         }
-        if(leap(year+1) && monthTarget > 2){
-            numberOfDays++;
-        }
-        else if(leap(year)){
-            numberOfDays--;
-        }
+        numberOfDays += 1;
     }
-    else{
-        for(int i=month+1; i<monthTarget; i++){
-            numberOfDays += days_in_month[i];
-        }
-    }
-    return numberOfDays+1;
+    return numberOfDays;
 }
 
 //determine which day of the week is 1st of march/oct
 int dateOfLastSunday(int monthTarget, int numberOfDays){
-    //firstDay is first day of monthTarget
-    int firstDay = numberOfDays % 7; //this is to find out which day 1st of march falls on 
-    firstDay += day;
-    if(firstDay > 7){
-        firstDay -= 7; //gives the day of the week for 1st march
+    int dateTarget;
+    if(numberOfDays != 0){
+        //firstDay is first day of monthTarget
+        int firstDay = numberOfDays % 7; //this is to find out which day 1st of march falls on 
+        firstDay += day;
+        if(firstDay > 7){
+            firstDay -= 7; //gives the day of the week for 1st march
+        }
+        dateTarget = 1+(7-firstDay); //gives date of first Sunday of march
     }
-    int dateTarget = 1+(7-firstDay); //gives date of first Sunday of march
+    else{
+        dateTarget = date + (7-day);
+        if(dateTarget > days_in_month[monthTarget]){
+            dateTarget -= 7;
+        }
+    }
     while(dateTarget <= days_in_month[monthTarget]){
         dateTarget += 7;
     }
