@@ -58,7 +58,7 @@ void set_date(int day_week, int d, int m, int y){
 //calculate the number of days until the last sunday of march/oct
 int calculateDaysToTarget(int monthTarget, int recalculate){ // month target is either march(3) or oct(10)
     int numberOfDays = 0; //define the current number of days to 1st of march/oct
-    if(month != monthTarget || (month == monthTarget && (date + 7-day) > days_in_month[month]) || recalculate == 1){ //nearest sunday is not in the same month/ same month and date >= daylight saving date
+    if(month != monthTarget || (month == monthTarget && (date + 7-day) > days_in_month[month]) || recalculate == 1){ //nearest sunday is not in the same month/ same month and date >= daylight saving date, recalculate means the current date is the date of daylight saving
         numberOfDays = days_in_month[month] - date; // get remaining number of days in the current month
         if(month < monthTarget){
             for(int i=month+1; i<monthTarget; i++){
