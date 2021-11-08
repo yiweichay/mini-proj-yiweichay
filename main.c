@@ -30,16 +30,16 @@ static volatile unsigned int hour = 0;
 static volatile unsigned int offled = 0;
 char *buf;
 char num;
-static volatile int date_daylightOn;
-static volatile int date_daylightOff;
-static volatile int dusk[2];
-static volatile int dawn[2];
-static volatile int midday[2] = {61, 25};
-static volatile int solarnoon[] = {0, 12};
+static volatile unsigned int date_daylightOn;
+static volatile unsigned int date_daylightOff;
+static volatile unsigned int dusk[2];
+static volatile unsigned int dawn[2];
+static volatile unsigned int midday[2] = {0, 12};
+static volatile unsigned int solarnoon[] = {0, 12};
 
 unsigned int LDRoutput;
-static volatile int dawnOver = 1;
-static volatile int duskOver = 1;
+static volatile unsigned int dawnOver = 1;
+static volatile unsigned int duskOver = 1;
 
 void __interrupt(high_priority) HighISR()
 {
@@ -55,8 +55,10 @@ void __interrupt(high_priority) HighISR()
                 if (hour==24){
                     hour=0; //reset a when it gets too big
                     nextday();
-                    dawnOver = 0;
-                    duskOver = 0;
+                    if(dawnOver != 0 && duskOver != 0){
+                        dawnOver = 0;
+                        duskOver = 0;
+                    }
                 } 
         
                 if (hour == 1){ //turn off led between 1am and 5am
@@ -146,17 +148,18 @@ void main(void) {
     }
     LEDarray_disp_bin(hour);
     Interrupts_init();
+    
     while (1){
         buf = &num;
-        DATE2String(buf, date_daylightOn, getDate(), getMonth(), getYear(), sec, min, hour);
+        DATE2String(buf, date_daylightOn, getDate(), getMonth(), getYear(), sec, min, hour, midday[1], midday[0]);
         LDRoutput = ADC_getval();
-        if (LDRoutput >= dayLightPresent && dawnOver == 0){
-            //dawn = [min, hour];
+        
+        if ((LDRoutput >= dayLightPresent) && (dawnOver == 0)){
             dawn[0] = min;
             dawn[1] = hour;
             dawnOver = 1;
         }
-        if (LDRoutput <= dayLightAbsent && duskOver == 0){
+        if (LDRoutput <= dayLightAbsent && duskOver == 0 && dawnOver == 1){
             dusk[0] = min;
             dusk[1] = hour;
             ///get midday time from clock here (take dusk - dawn)

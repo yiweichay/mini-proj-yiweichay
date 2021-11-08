@@ -13,6 +13,7 @@ void led_init(void)
 {
     LATHbits.LATH3 = 0; //set initial output state
     TRISHbits.TRISH3 = 0; //set TRIS value for pin (output)
+    
 }
 
 void set_led(unsigned int value){
