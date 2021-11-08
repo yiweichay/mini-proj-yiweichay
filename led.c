@@ -23,4 +23,3 @@ void set_led(unsigned int value){
         LATHbits.LATH3 = 1;
     }
 }
-

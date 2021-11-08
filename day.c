@@ -9,7 +9,7 @@
 #include <xc.h>
 #include "day.h"
 
-static int days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+int days_in_month[] = {0, 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
 int day, date, month, year;
 
 //code to calculate the leap year
@@ -21,7 +21,7 @@ int leap(int y){
 void nextday(void) 
 {
     day += 1;
-    if(day > 7){day -= 7;}
+    if(day > 7){day = 1;}
     date += 1;
     if (date > days_in_month[month]){ 
         date = 1;
