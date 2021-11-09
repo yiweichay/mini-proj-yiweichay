@@ -36,23 +36,23 @@ http://wordpress.mrreid.org/2010/10/31/why-change-the-clocks/
 
 ## Code is operated as follows:
 
-1. Initialisation:
+1. Initialisation
 Set the current date in the code (line 117 in main.c) and initialise the current hour of the day using RF2 button. Once you've got the current hour of the day, start the clock by hitting on button RF3 once. The LED array flashes a few times and the clock starts. 
 
-2. Monitoring light level with LDR:
+2. Monitoring light level with LDR
 In led.c, the set_led() function monitors the light level and turns on LED RH3 when it is dark and vice versa when it is light.
 
-3. Displaying the current hour of the day:
+3. Displaying the current hour of the day
 Timer is used to keep track of the time of the day. The hour is displayed on the LED array.
 
-4. Turning light off between 1-5am:
+4. Turning light off between 1-5am
 An interrupt was used to ensure that the LED (RH3) turns off regardless of the light level between 1-5am.
 
-5. Adjusting for daylight saving time:
+5. Adjusting for daylight saving time
 A new file day.c was used to store all the functions that were used to adjust for daylight saving time. Functions were used to set the current day, date, month and year. To source for the last Sunday of the month, the function calculateDaysToTarget calculates the numnber of days until 1st of March or 1st of October. The function dateOfLastSunday calculates the number of days to the first Sunday in the target month (march/oct) and increment count by 7 to find the last Sunday of the month. Daylight saving on will take place at 1am on the last sunday of March while daylight saving off takes place at 2am on the last Sunday of October. 
 
-6. Remaining synchronicity:
-- For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code. The code checks the actual noon everyday by storing the time at which dusk and dawn takes place. The midday value is then calculated. If the midday value does not match the solar noon (set at 12pm), the clock will move forwards/backwards the next day, adjusting and remaining synchronicity. 
+6. Remaining synchronicity//
+For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code. The code checks the actual noon everyday by storing the time at which dusk and dawn takes place. The midday value is then calculated. If the midday value does not match the solar noon (set at 12pm), the clock will move forwards/backwards the next day, adjusting and remaining synchronicity. 
 
 ## How to test the code?
 
