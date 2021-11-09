@@ -34,7 +34,7 @@ No clock is perfect, they can all run slightly fast/slow and can by influenced b
 ![Day length](gifs/day-length-london.jpg)
 http://wordpress.mrreid.org/2010/10/31/why-change-the-clocks/
 
-##Code is operated as follows:
+## Code is operated as follows:
 1. Initialisation
 Set the current date in the code and initialise the current hour of the day using RF2 button. Once you've got the current hour of the day, start the clock by hitting on button RF3 once. The LED array flashes a few times and the clock starts. 
 
@@ -53,7 +53,7 @@ A new file day.c was used to store all the functions that were used to adjust fo
 6. Remaining synchronicity
 For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code. The code checks the actual noon everyday by storing the time at which dusk and dawn takes place. The midday value is then calculated. If the midday value does not match the solar noon (set at 12pm), the clock will move forwards/backwards the next day, adjusting and remaining synchronicity. 
 
-##How to test the code?
+## How to test the code?
 1. The timer prescaler is lowered to ensure that the time moves faster for me to test my code.
 2. On the LCD screen, the first variable shown is the date at which the next daylight saving will take place. This is to check and ensure whether the date in which daylight saving takes place is correct. 
 3. On the second line of the LCD, the variable next to the time is the calculated midday value. This is to check whether the clock moves forwards/backwards when the time reaches the midday value and hence adjust for synchronicity. 
