@@ -42,29 +42,29 @@ Set the current day, date, month and year in the code (line 117 in main.c) and i
 
 **2. Monitoring light level with LDR**
 
-In led.c, the set_led() function monitors the light level and turns on LED RH3 when it is dark and vice versa when it is light.
+In led.c, the set_led() function monitors the light level and turns on LED RH3 when it is dark and vice versa when it is light. Change the relevant definitions of daylightAbsent and daylightPresent according to the lighting conditions of the testing environment. 
 
 **3. Displaying the current hour of the day**
 
-Timer is used to keep track of the time of the day. The hour is displayed on the LED array.
+Timer is used to keep track of the time of the day. The timer is set to overflow every second. Change the prescaler ratio in order to speed up the clock for testing purposes. The hour is displayed on the LED array.
 
 **4. Turning light off between 1-5am**
 
-An interrupt was used to ensure that the LED (RH3) turns off regardless of the light level between 1-5am.
+The timer interrupt toggles a volatile variable accordingly to ensure that the LED (RH3) stays off regardless of the light level between 1-5am.
 
 **5. Adjusting for daylight saving time**
 
-A new file day.c was used to store all the functions that were used to adjust for daylight saving time. Functions were used to set the current day, date, month and year. To source for the last Sunday of the month, the function calculateDaysToTarget calculates the numnber of days until 1st of March or 1st of October. The function dateOfLastSunday calculates the number of days to the first Sunday in the target month (march/oct) and increment count by 7 to find the last Sunday of the month. Daylight saving on will take place at 1am on the last sunday of March while daylight saving off takes place at 2am on the last Sunday of October. 
+A new file day.c was used to store all the functions that were used to adjust for daylight saving time. Functions were used to set the current day, date, month and year. To source for the last Sunday of the month, the function calculateDaysToTarget calculates the number of days until 1st of March or 1st of October. The function dateOfLastSunday then searches for date of the first Sunday in that target month (march/oct) and increments the target date by 7 to find the last Sunday of the month. If the current month happens to be the same as the targetted month (march/oct), the code will also determine if the last Sunday of the current month has passed in order to correctly identify whether the clock has been adjusted in that month for that particular year. Daylight saving on will take place at 1am on the last sunday of March while daylight saving off takes place at 2am on the last Sunday of October. When these happen, the new daylight saving on/off date is recalculated and the relevant variable is updated.
 
 **6. Remaining synchronicity**
 
-For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code. The code checks the actual noon everyday by storing the time at which dusk and dawn takes place. The midday value is then calculated. If the midday value does not match the solar noon (set at 12pm), the clock will move forwards/backwards the next day, adjusting and remaining synchronicity. The dawn and dusk times are only calculated from the second day from the initialisation due to the first day being used as a set up. Actual noon will hence adjust accordingly from the third day onwards.
+The solar noon is taken to be at 12pm daily. For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code and hence the clock is assumed to be synchronised with the sun initially. Every time the LDR first detects a change from dayLightAbsent to dayLightPresent (dawn), or from dayLightPresent to dayLightAbsent (dusk), the clock's time that those events occur are stored in dawn[2] and dusk[2] respectively. At dusk everyday, the code calculates the solar noon of the clock (named midday[2] in the code) based on the two dawn and dusk times recorded for the day. When the current time next corresponds to this calculated solar noon (midday[2]), the clock is reset to 12pm to maintain synchronicity with the sun if any drifts are present. As mentioned earlier, the dawn and dusk times are only calculated from the second day of the initialisation due to the first day being used as a set up. Hence, the clock's solar noon will only be recaibrated accordingly from the third day onwards.
 
-## How to test the code?
+## How I tested the code
 
 1. The timer prescaler is lowered to ensure that the time moves faster for me to test my code.
-2. On the LCD screen, the first variable shown is the date at which the next daylight saving will take place. This is to check and ensure whether the date in which daylight saving takes place is correct. 
-3. On the second line of the LCD, the variable next to the time is the calculated midday value. This is to check whether the clock moves forwards/backwards when the time reaches the midday value and hence adjust for synchronicity. 
+2. On the LCD screen, the first variable shown is the date at which the next daylight saving will begin in March. This is to check and ensure whether the date in which daylight saving takes place is correct. The same was done to test the calculation of the last Sunday of October, but was later removed to save space on the LCD screen when it's been identified to work correctly.
+3. On the second line of the LCD, the variable next to the time is the calculated midday value. This is to check whether the clock moves forwards/backwards when the time reaches the midday value and hence adjust for synchronicity. This value remains as 12:00 regardless on the first day. It will then display the midpoint-time between dawn and dusk of each day from the second day's evening onwards.
 
 
 
