@@ -58,7 +58,7 @@ A new file day.c was used to store all the functions that were used to adjust fo
 
 **6. Remaining synchronicity**
 
-For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code. The code checks the actual noon everyday by storing the time at which dusk and dawn takes place. The midday value is then calculated. If the midday value does not match the solar noon (set at 12pm), the clock will move forwards/backwards the next day, adjusting and remaining synchronicity. 
+For the first loop (first day of the clock starting), the actual noon is initialised at 12pm in the code. The code checks the actual noon everyday by storing the time at which dusk and dawn takes place. The midday value is then calculated. If the midday value does not match the solar noon (set at 12pm), the clock will move forwards/backwards the next day, adjusting and remaining synchronicity. The dawn and dusk times are only calculated from the second day from the initialisation due to the first day being used as a set up. Actual noon will hence adjust accordingly from the third day onwards.
 
 ## How to test the code?
 
