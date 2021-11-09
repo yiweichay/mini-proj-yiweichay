@@ -37,7 +37,7 @@ http://wordpress.mrreid.org/2010/10/31/why-change-the-clocks/
 ## Code is operated as follows:
 
 1. Initialisation
-- Set the current date in the code and initialise the current hour of the day using RF2 button. Once you've got the current hour of the day, start the clock by hitting on button RF3 once. The LED array flashes a few times and the clock starts. 
+- Set the current date in the code (line 117 in main.c) and initialise the current hour of the day using RF2 button. Once you've got the current hour of the day, start the clock by hitting on button RF3 once. The LED array flashes a few times and the clock starts. 
 
 2. Monitoring light level with LDR
 - In led.c, the set_led() function monitors the light level and turns on LED RH3 when it is dark and vice versa when it is light.
