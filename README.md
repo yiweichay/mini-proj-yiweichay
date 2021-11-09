@@ -38,7 +38,7 @@ http://wordpress.mrreid.org/2010/10/31/why-change-the-clocks/
 
 **1. Initialisation**
 
-Set the current date in the code (line 117 in main.c) and initialise the current hour of the day using RF2 button. Once you've got the current hour of the day, start the clock by hitting on button RF3 once. The LED array flashes a few times and the clock starts. 
+Set the current date in the code (line 117 in main.c) and initialise the current hour of the day using RF2 button. Once you've got the current hour of the day, start the clock by hitting on button RF3 once. The LED array flashes a few times and the clock starts. A video demonstrating the initialisation of my clock can be found [here](https://imperiallondon-my.sharepoint.com/:v:/g/personal/ywc19_ic_ac_uk/EVIgtHvGm25OkoPABVoYU1gBPNVlhGP6r6OobJstt_44ew?e=HpFHhx).
 
 **2. Monitoring light level with LDR**
 
